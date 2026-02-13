@@ -33,4 +33,22 @@
  */
 export function calculateDosaOrder(type, quantity = 1, isSpicy = false) {
   // Your code here
+
+  //  plain=40, masala=60, onion=50, butter=70, paper=90, cheese=80
+
+  if(quantity<=0) return null
+
+  let basePrice = 0;
+  if (type === "plain") basePrice = 40;
+  else if (type === "masala") basePrice = 60;
+  else if (type === "onion") basePrice = 50;
+  else if (type === "butter") basePrice = 70;
+  else if (type === "paper") basePrice = 90;
+  else if (type === "cheese") basePrice = 80;
+else return null;
+
+  if(isSpicy)basePrice+=10;
+  let total=basePrice*quantity;
+
+  return { type, quantity, pricePerDosa:basePrice, total };
 }

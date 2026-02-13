@@ -39,20 +39,77 @@
  */
 export const calcStrikeRate = (runs, balls) => {
   // Your code here
+//    *   1. calcStrikeRate(runs, balls)
+//  *      - Strike rate = (runs / balls) * 100, rounded to 2 decimal places
+//  *      - Agar balls <= 0 ya runs < 0, return 0
+//  *
+
+
+if(balls<=0 ||runs<=0)return 0;
+return +((runs / balls) * 100).toFixed(2);
 };
 
 export const calcEconomy = (runsConceded, overs) => {
   // Your code here
+
+//    *
+//  *   2. calcEconomy(runsConceded, overs)
+//  *      - Economy = runsConceded / overs, rounded to 2 decimal places
+//  *      - Agar overs <= 0 ya runsConceded < 0, return 0
+
+
+
+
+if(overs<=0 ||runsConceded<=0)return 0;
+return +(runsConceded / overs).toFixed(2);
 };
 
 export const calcBattingAvg = (totalRuns, innings, notOuts = 0) => {
   // Your code here
+
+//     3. calcBattingAvg(totalRuns, innings, notOuts = 0)
+//  *      - Batting avg = totalRuns / (innings - notOuts), rounded to 2 decimal places
+//  *      - Default notOuts = 0
+//  *      - Agar innings - notOuts <= 0, return 0
+
+
+if(totalRuns<=0||innings<=0||notOuts<0)return 0;
+if( innings - notOuts <= 0) return 0
+
+return +(totalRuns / (innings - notOuts)).toFixed(2);
 };
 
 export const isAllRounder = (battingAvg, economy) => {
   // Your code here
+
+//      4. isAllRounder(battingAvg, economy)
+//  *      - Return true agar battingAvg > 30 AND economy < 8
+//  *
+
+
+if(battingAvg<0||economy<0) return false;
+
+return  battingAvg > 30 && economy < 8
+
 };
 
 export const getPlayerCard = (player) => {
   // Your code here
+
+//  *   5. getPlayerCard(player)
+//  *      - player object: { name, runs, balls, totalRuns, innings, notOuts, runsConceded, overs }
+//  *      - Return: { name, strikeRate, economy, battingAvg, isAllRounder }
+//  *      - Use the above functions internally
+//  *      - Agar player null/undefined hai ya name missing, return null
+ 
+if(player===null||typeof player === "undefined"||!player.name) return null
+
+let { name, runs, balls, totalRuns, innings, notOuts, runsConceded, overs }=player;
+let strikeRate=calcStrikeRate(runs, balls);
+let economy=calcEconomy  (runsConceded, overs);
+let battingAvg=calcBattingAvg(totalRuns, innings, notOuts )
+let isPlayerAllRounder=isAllRounder(battingAvg,economy);
+console.log( { name, strikeRate, economy, battingAvg, isAllRounder })
+return { name, strikeRate, economy, battingAvg, isAllRounder:isPlayerAllRounder }
+
 };
