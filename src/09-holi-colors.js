@@ -12,8 +12,7 @@
  *
  * Functions:
  *
- *   1. mixColors(color1, color2)
- *      - Mix two colors by averaging their RGB values
+ *   1. mixColors(color1*factor * two colors by averaging their RGB values
  *      - New name: `${color1.name}-${color2.name}`
  *      - Round RGB values to integers
  *      - MUST NOT modify color1 or color2
@@ -26,22 +25,22 @@
  *      - MUST NOT modify original color
  *      - Agar color null or factor not number, return null
  *
- *   3. addToPalette(palette, color)
- *      - Return NEW array with color added at end
- *      - MUST NOT modify original palette array
- *      - Agar palette not array, return [color]
- *      - Agar color null/invalid, return copy of palette
- *
- *   4. removeFromPalette(palette, colorName)
- *      - Return NEW array without the color with that name
- *      - MUST NOT modify original palette
- *      - Agar palette not array, return []
- *
- *   5. mergePalettes(palette1, palette2)
- *      - Merge two palettes into NEW array
- *      - No duplicate names (keep first occurrence)
- *      - MUST NOT modify either original palette
- *      - Agar either not array, treat as empty array
+//  *   3. addToPalette(palette, color)
+//  *      - Return NEW array with color added at end
+//  *      - MUST NOT modify original palette array
+//  *      - Agar palette not array, return [color]
+//  *      - Agar color null/invalid, return copy of palette
+//  *
+//  *   4. removeFromPalette(palette, colorName)
+//  *      - Return NEW array without the color with that name
+//  *      - MUST NOT modify original palette
+//  *      - Agar palette not array, return []
+// //  *
+//  *   5. mergePalettes(palette1, palette2)
+//  *      - Merge two palettes into NEW array
+//  *      - No duplicate names (keep first occurrence)
+//  *      - MUST NOT modify either original palette
+//  *      - Agar either not array, treat as empty array
  *
  * Hint: Use spread operator [...arr], Object spread {...obj} to create
  *   copies. NEVER use push, splice, or direct property assignment on inputs.
@@ -52,23 +51,146 @@
  *   mixColors(red, blue)
  *   // => { name: "red-blue", r: 128, g: 0, b: 128 }
  *   // red and blue objects are UNCHANGED
+ * 
+ * 
  */
+
+function isValidColor(color) {
+  return (
+    color &&
+    typeof color === "object" &&
+    "r" in color &&
+    "g" in color &&
+    "b" in color
+  );
+}
+
 export function mixColors(color1, color2) {
   // Your code here
+  // Validate inputs (must be valid objects)
+
+  // if (
+  //   !color1 ||
+  //   !color2 ||
+  //   typeof color1 !== "object" ||
+  //   typeof color2 !== "object"
+  // ) {
+  //   return null;
+  // }
+
+  if (!isValidColor(color1) || !isValidColor(color2)) return null;
+
+  //credit :- https://github.com/chaicodehq/js-functions-SaurabhRavte/blob/main/src/09-holi-colors.js
+
+  let name = `${color1.name}-${color2.name}`;
+  let r = (color1.r + color2.r) / 2;
+  let g = (color1.g + color2.g) / 2;
+  let b = (color1.b + color2.b) / 2;
+
+  // console.log({ name,r,g,b })
+
+  // console.log({ name, r: Math.ceil(r), g: Math.ceil(g), b: Math.ceil(b) })
+  return { name, r: Math.ceil(r), g: Math.ceil(g), b: Math.ceil(b) };
+
+  // *   1. mixColors(color1, color2)
+  //  *      - Mix two colors by averaging their RGB values
+  //  *      - New name: `${color1.name}-${color2.name}`
+  // *      - Round RGB values to integers
+  //  *      - MUST NOT modify color1 or color2
+  //  *      - Agar either color null/invalid, return null
+  //  *
+  //  *
 }
 
 export function adjustBrightness(color, factor) {
   // Your code here
+  //  *   2. adjustBrightness(color, factor)
+  //  *      - Multiply each RGB by factor, clamp to 0-255 range
+  //  *      - Round to integers using Math.round
+  //  *      - Name stays same
+  //  *      - MUST NOT modify original color
+  //  *      - Agar color null or factor not number, return null
+  //  *
+  if (color === null || typeof factor !== "number") return null;
+
+  let name = color.name;
+  let r = Math.ceil(color.r * factor);
+  let g = Math.ceil(color.g * factor);
+  let b = Math.ceil(color.b * factor);
+
+  // console.log({ name,r,g,b })
+
+  // console.log({ name, r: Math.ceil(r), g: Math.ceil(g), b: Math.ceil(b) })
+  return {
+    name,
+    r: Math.min(r, 255),
+    g: Math.min(g, 255),
+    b: Math.min(b, 255),
+  };
 }
 
 export function addToPalette(palette, color) {
   // Your code here
+  //  *   3. addToPalette(palette, color)
+  //  *      - Return NEW array with color added at end
+  //  *      - MUST NOT modify original palette array
+  //  *      - Agar palette not array, return [color]
+  //  *      - Agar color null/invalid, return copy of palette
+
+  if (!color || color === null) return [...palette];
+  if (!Array.isArray(palette)) return [color];
+
+  return [{ ...palette }, { ...color }];
 }
 
 export function removeFromPalette(palette, colorName) {
   // Your code here
+  //  *   4. removeFromPalette(palette, colorName)
+  //  *      - Return NEW array without the color with that name
+  //  *      - MUST NOT modify original palette
+  //  *      - Agar palette not array, return []
+  //  *
+
+  if (!Array.isArray(palette)) return [];
+
+  // palette = [
+  //   { name: "red", r: 255, g: 0, b: 0 },
+  //   { name: "blue", r: 0, g: 0, b: 255 }
+  // ]
+
+  // colorName = "red"
+
+  let copypalette = [...palette];
+  // console.log(copypalette);
+
+  return copypalette.filter((el) => el.name !== colorName);
 }
 
 export function mergePalettes(palette1, palette2) {
   // Your code here
+  //  *   5. mergePalettes(palette1, palette2)
+  //  *      - Merge two palettes into NEW array
+  //  *      - No duplicate names (keep first occurrence)
+  //  *      - MUST NOT modify either original palette
+  //  *      - Agar either not array, treat as empty array
+
+  // palette = [
+  //   { name: "red", r: 255, g: 0, b: 0 },
+  //   { name: "blue", r: 0, g: 0, b: 255 }
+  // ]
+
+  let myPalette1=Array.isArray(palette1) ? palette1 : [];
+  let myPalette2 = Array.isArray(palette2) ? palette2 : [];
+  
+
+
+  const seen = new Set();
+
+  return [...myPalette1, ...myPalette2].filter((color) => {
+    if (seen.has(color.name)) return false;
+    seen.add(color.name);
+    return true;
+  });
+
+
 }

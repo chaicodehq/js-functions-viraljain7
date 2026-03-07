@@ -32,16 +32,16 @@
  *   6. pack(spice)
  *      - Returns: { ...spice, packed: true, label: `${spice.name} Masala` }
  *
- *   7. createRecipe(steps)
- *      - steps: array of step name strings, e.g., ["grind", "roast", "pack"]
- *      - Maps step names to functions: "grind"=>grind, "roast"=>roast,
- *        "mix"=>mix, "pack"=>pack
- *      - Returns a piped function that applies steps in order
- *      - Unknown step names are skipped
- *      - Agar steps empty or not array, return identity function
- *
- * Hint: pipe and compose are the building blocks of functional programming.
- *   pipe uses reduce left-to-right, compose uses reduceRight.
+//  *   7. createRecipe(steps)
+//  *      - steps: array of step name strings, e.g., ["grind", "roast", "pack"]
+//  *      - Maps step names to functions: "grind"=>grind, "roast"=>roast,
+//  *        "mix"=>mix, "pack"=>pack
+//  *      - Returns a piped function that applies steps in order
+//  *      - Unknown step names are skipped
+//  *      - Agar steps empty or not array, return identity function
+//  *
+//  * Hint: pipe and compose are the building blocks of functional programming.
+//  *   pipe uses reduce left-to-right, compose uses reduceRight.
  *
  * @example
  *   const process = pipe(grind, roast, pack);
@@ -53,29 +53,91 @@
  *   // => { name: "Haldi", form: "powder", packed: true, label: "Haldi Masala" }
  */
 export function pipe(...fns) {
-  // Your code here
+  // If no functions, return identity function
+  if (fns.length === 0) {
+    return (x) => x;
+  }
+
+  // Return a new function
+  return function (value) {
+    let result = value;
+
+    // Apply functions from left to right
+    for (let fn of fns) {
+      result = fn(result);
+    }
+
+    return result;
+  };
 }
 
 export function compose(...fns) {
   // Your code here
+  if (fns.length === 0) {
+    return (x) => x;
+  }
+
+  return function (value) {
+    return fns.reduceRight((acc, fn) => fn(acc), value);
+  };
+
+  
 }
 
 export function grind(spice) {
   // Your code here
+   return { ...spice, form: "powder" }
 }
 
 export function roast(spice) {
   // Your code here
+  return { ...spice, roasted: true, aroma: "strong" }
 }
 
 export function mix(spice) {
   // Your code here
+  return  { ...spice, mixed: true }
 }
 
 export function pack(spice) {
   // Your code here
+  return  { ...spice, packed: true, label: `${spice.name} Masala` }
 }
 
 export function createRecipe(steps) {
-  // Your code here
+  // Your code here  
+  // 7. createRecipe(steps)
+//  *      - steps: array of step name strings, e.g., ["grind", "roast", "pack"]
+//  *      - Maps step names to functions: "grind"=>grind, "roast"=>roast,
+//  *        "mix"=>mix, "pack"=>pack
+//  *      - Returns a piped function that applies steps in order
+//  *      - Unknown step names are skipped
+//  *      - Agar steps empty or not array, return identity function
+//  *
+//  * Hint: pipe and compose are the building blocks of functional programming.
+//  *   pipe uses reduce left-to-right, compose uses reduceRight.
+
+// return steps.map(s=>)
+
+
+  if (!Array.isArray(steps) || steps.length === 0) {
+    return (x) => x;
+  }
+
+  const stepMap = {
+    grind,
+    roast,
+    mix,
+    pack
+  };
+
+  const functions = steps
+    .map(step => stepMap[step])
+    .filter(Boolean); // remove undefined steps
+
+  if (functions.length === 0) {
+    return (x) => x;
+  }
+
+  return pipe(...functions);
 }
